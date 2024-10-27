@@ -1,16 +1,22 @@
 import { Injectable } from "@nestjs/common";
 import { S3 } from "aws-sdk";
 import { extname } from "path";
+import { join } from 'path';
+import { config } from 'dotenv';
 
+
+config({path:join(process.cwd(),".env")})
 
 @Injectable()
 export class S3Service{
+  
   private readonly s3:S3;
+  
   constructor(){
-    console.log(process.env.S3_SECRET_KEY)
+   
     this.s3=new S3({
       credentials:{
-        accessKeyId:process.env.S3_SECRET_KEY,
+        accessKeyId:process.env.S3_ACCESS_KEY,
         secretAccessKey:process.env.S3_SECRET_KEY
       },
       endpoint:process.env.S3_API_ENDPOINT,
@@ -19,7 +25,9 @@ export class S3Service{
     })
   }
   async uploadFile(file:Express.Multer.File,FolderName:string){
+    console.log(process.env.S3_ACCESS_KEY,process.env.S3_SECRET_KEY)
     const ext=extname(file.originalname)
+    console.log(ext)
     return await this.s3.upload({
       Bucket:process.env.S3_BUCKET_NAME,
       Key:`${FolderName}/${Date.now()}${ext}`,
