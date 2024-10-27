@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -29,11 +29,16 @@ export class CategoryService {
         show=toBoolean(show)
       }
       const {Location}=await this.s3Service.uploadFile(image,"snapfood-category")
+      let parent:CategoryEntity=null;
+      if(parentId && !isNaN(parentId)){
+        parent=await this.findOneById(+parentId)
+      }
       await this.categoryRepository.insert({
         title,
         slug,
         show,
-        image:Location
+        image:Location,
+        parentId:parent?.id
 
       })
      return{
@@ -41,12 +46,27 @@ export class CategoryService {
      }
   }
 
-  findAll() {
-    return `This action returns all category`;
+  async findAll() {
+    const [categooris,count]=await this.categoryRepository.findAndCount({
+      where:{},
+      relations:{
+        parent:true
+      },
+      select:{
+        parent:{
+          title:true
+        }
+      }
+    })
+    return {
+      categooris
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOneById(id: number) {
+    const category=await this.categoryRepository.findOneBy({id})
+    if(!category) throw new NotFoundException("not found category!!")
+      return category 
   }
  async findOneBySlug(slug: string) {
     return await this.categoryRepository.findOneBy({slug});
