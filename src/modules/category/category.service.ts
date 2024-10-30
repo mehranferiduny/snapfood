@@ -3,7 +3,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CategoryEntity } from './entities/category.entity';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { S3Service } from '../s3/s3.service';
 import { isBoolean, toBoolean } from 'src/common/utils/function.utils';
 import { PagitionDto } from 'src/common/dto/pagition.dto';
@@ -30,7 +30,7 @@ export class CategoryService {
       if(isBoolean(show)){
         show=toBoolean(show)
       }
-      const {Location}=await this.s3Service.uploadFile(image,"snapfood-category")
+      const {Location,Key}=await this.s3Service.uploadFile(image,"snapfood-category")
       let parent:CategoryEntity=null;
       if(parentId && !isNaN(parentId)){
         parent=await this.findOneById(+parentId)
@@ -40,6 +40,7 @@ export class CategoryService {
         slug,
         show,
         image:Location,
+        imageKey:Key,
         parentId:parent?.id
 
       })
@@ -79,8 +80,44 @@ export class CategoryService {
     return await this.categoryRepository.findOneBy({slug});
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+ async update(id: number, updateCategoryDto: UpdateCategoryDto,image:Express.Multer.File) {
+
+  const {parentId,show,slug,title}=updateCategoryDto
+  const categoory=await this.findOneById(id)
+  const updateObject:DeepPartial<CategoryEntity>={}
+
+
+  if(image){
+    const {Location,Key}= await this.s3Service.uploadFile(image,"snapfood-category")
+    if(Location){
+      updateObject['image']=Location
+      updateObject['imageKey']=Key
+      await this.s3Service.deleteFile(categoory?.imageKey)
+    }
+  }
+
+  if(title)updateObject["title"]=title;
+  if(isBoolean(show))updateObject["show"]=toBoolean(show);
+
+  if(parentId && !isNaN(parseInt(parentId.toString()))){
+     const categooryParent=await this.findOneById(+parentId)
+     updateObject["parentId"]=categooryParent.id;
+  }
+
+  if(slug){
+    const categoorySlug=await this.findOneBySlug(slug);
+    if(categoorySlug && categoorySlug.id !== id){
+      throw new ConflictException("categoory alredy exist")
+    }
+    updateObject['slug']=slug
+  }
+  
+    await this.categoryRepository.update({id},updateObject)
+
+    return {
+      message:"updated sacsesfully"
+    }
+ 
   }
 
   remove(id: number) {

@@ -25,9 +25,9 @@ export class S3Service{
     })
   }
   async uploadFile(file:Express.Multer.File,FolderName:string){
-    console.log(process.env.S3_ACCESS_KEY,process.env.S3_SECRET_KEY)
+
     const ext=extname(file.originalname)
-    console.log(ext)
+ 
     return await this.s3.upload({
       Bucket:process.env.S3_BUCKET_NAME,
       Key:`${FolderName}/${Date.now()}${ext}`,
