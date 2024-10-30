@@ -1,7 +1,8 @@
 import { BaseEntity } from "src/common/abestracs/base.entity";
 import { EntityName } from "src/common/enum/entity-name.enum";
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { UserAdressEntity } from "./addres.entity";
+import { OtpEntity } from "./otp.entity";
 
 @Entity(EntityName.User)
 export class UserEntity extends BaseEntity{
@@ -16,8 +17,11 @@ export class UserEntity extends BaseEntity{
    @Column({unique:true,nullable:true})
    email:string
 
-   @Column({unique:true})
-   invait_code:true
+   @Column({unique:true,nullable:true})
+   invait_code:number
+
+   @Column({default:false,nullable:true})
+   verifay_mobail:boolean
 
    @Column({default:0})
    scoer:number
@@ -28,4 +32,11 @@ export class UserEntity extends BaseEntity{
 
    @OneToMany(()=>UserAdressEntity,(address)=>address.user)
    addressList:UserAdressEntity[]
+
+
+   @Column({nullable:true})
+   otpId:number
+   @OneToOne(()=>OtpEntity,(otp)=>otp.user)
+   @JoinColumn({name:"otpId"})
+   otp:OtpEntity
 }

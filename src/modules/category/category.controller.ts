@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, Upl
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { ApiConsumes } from '@nestjs/swagger';
+import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { UpladFileS3 } from 'src/common/interceptor/upload-file.interceptor';
 import { MIME_TYPES } from 'src/common/enum/type-image.enum';
 import { Pagition } from 'src/common/decorators/pagition.decorator';
@@ -10,6 +10,7 @@ import { PagitionDto } from 'src/common/dto/pagition.dto';
 import { TypeData } from 'src/common/enum/type-data.enum';
 
 @Controller('category')
+@ApiTags("Categoory")
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 

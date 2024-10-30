@@ -15,5 +15,10 @@ namespace NodeJS{
     S3_BUCKET_NAME:string
     S3_SECRET_KEY:string
     S3_API_ENDPOINT:string
+
+
+    //! ACCSES_TOKEN
+    REFRESH_TOKEN_SECRET:string
+    ACSSES_TOKEN_SECRET:string
   }
 }
