@@ -36,6 +36,11 @@ export class CategoryController {
   findAll(@Query() pagitionDto:PagitionDto) {
     return this.categoryService.findAll(pagitionDto);
   }
+  @Get("/by-slug/:slug")
+
+  findByslug(@Param("slug") slug:string) {
+    return this.categoryService.findByslug(slug);
+  }
 
  
 

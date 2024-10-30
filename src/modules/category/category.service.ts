@@ -76,6 +76,20 @@ export class CategoryService {
     if(!category) throw new NotFoundException("not found category!!")
       return category 
   }
+
+  async findByslug(slug:string){
+  
+    const catagoorySlug=await this.categoryRepository.findOne({
+      where:{slug},
+      relations:{childern:true}
+    })
+    
+    if(!catagoorySlug) throw new NotFoundException("slug catgoory slug notFound!")
+    return {
+      catagoorySlug
+    }
+  }
+
  async findOneBySlug(slug: string) {
     return await this.categoryRepository.findOneBy({slug});
   }
