@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator, Query } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ApiConsumes } from '@nestjs/swagger';
 import { UpladFileS3 } from 'src/common/interceptor/upload-file.interceptor';
 import { MIME_TYPES } from 'src/common/enum/type-image.enum';
+import { Pagition } from 'src/common/decorators/pagition.decorator';
+import { PagitionDto } from 'src/common/dto/pagition.dto';
 
 @Controller('category')
 export class CategoryController {
@@ -29,8 +31,9 @@ export class CategoryController {
   }
 
   @Get()
-  findAll() {
-    return this.categoryService.findAll();
+  @Pagition()
+  findAll(@Query() pagitionDto:PagitionDto) {
+    return this.categoryService.findAll(pagitionDto);
   }
 
  

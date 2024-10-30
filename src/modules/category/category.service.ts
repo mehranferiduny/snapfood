@@ -6,6 +6,8 @@ import { CategoryEntity } from './entities/category.entity';
 import { Repository } from 'typeorm';
 import { S3Service } from '../s3/s3.service';
 import { isBoolean, toBoolean } from 'src/common/utils/function.utils';
+import { PagitionDto } from 'src/common/dto/pagition.dto';
+import { PagitionGeneritor, PagitionSolver } from 'src/common/utils/pagition.utils';
 
 @Injectable()
 export class CategoryService {
@@ -46,7 +48,8 @@ export class CategoryService {
      }
   }
 
-  async findAll() {
+  async findAll(paginationDto:PagitionDto) {
+    const {limit,page,skip}=PagitionSolver(paginationDto)
     const [categooris,count]=await this.categoryRepository.findAndCount({
       where:{},
       relations:{
@@ -56,9 +59,13 @@ export class CategoryService {
         parent:{
           title:true
         }
-      }
+      },
+      skip,
+      take:limit,
+      order:{id:"DESC"}
     })
     return {
+      pagination:PagitionGeneritor(page,limit,count),
       categooris
     };
   }
