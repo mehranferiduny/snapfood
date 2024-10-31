@@ -48,3 +48,8 @@ export class SuppliarUploadDocDto{
    @ApiProperty({format:"binary"})
    image:string
 }
+export class SuppliarUploadContractDto{
+   @ApiProperty({format:"binary"})
+   contract:string
+
+}

@@ -12,7 +12,7 @@ import { JwtService } from "@nestjs/jwt";
 import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
 import { statusSuppliar } from "./enum/status.enum";
-import { DocumentTypeFile } from "./types/document.type";
+import { ContractTypeFile, DocumentTypeFile } from "./types/document.type";
 import { S3Service } from "../s3/s3.service";
 import { SuppliarDocumentEntity } from "./entities/document.entity";
 
@@ -145,6 +145,26 @@ export class SupplierService {
 
     
 
+  }
+
+  async uploadConcract(files:ContractTypeFile){
+    const {id}=this.req.suppliar
+    const {contract}=files
+
+    const suppliar=await this.suppliarRepository.findOneBy({id})
+  
+
+    
+    if(!suppliar) throw new NotFoundException("suppliar not found!")
+
+      const ContractResalt=await this.s3serivic.uploadFile(contract[0],"contract")
+
+      if(ContractResalt) suppliar.contract=ContractResalt.Location
+      suppliar.status=statusSuppliar.Contract
+      await this.suppliarRepository.save(suppliar)
+      return{
+        message:"upload contract sucssefuly"
+      }
   }
 
 

@@ -28,6 +28,9 @@ export class SupplierEntity extends BaseEntity {
 
   @Column({nullable:true})
   national_code:string
+  
+  @Column({nullable:true})
+  contract:string
 
   @Column({nullable:true,default:statusSuppliar.Registerd})
   status:string
