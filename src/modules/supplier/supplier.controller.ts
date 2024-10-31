@@ -14,7 +14,8 @@ import { SppliarAuth } from "src/common/decorators/auth.decorator";
 import { ApiConsumes } from "@nestjs/swagger";
 import { TypeData } from "src/common/enum/type-data.enum";
 import { UpladFileDocS3 } from "src/common/interceptor/upload-file.interceptor";
-import { ContractTypeFile, DocumentTypeFile } from "./types/document.type";
+import { ContractTypeFile, DocumentTypeFile, ImageTypeFile } from "./types/document.type";
+import { UpdateSupplierDto } from "./dto/update-supplier.dto";
 
 
 @Controller("supplier")
@@ -62,6 +63,17 @@ export class SupplierController {
     {
 
       return this.supplierService.uploadConcract(files)
+  }
+  @Put("/update-supliar")
+  @ApiConsumes(TypeData.MultipartData,TypeData.UrlEncoded,TypeData.Json)
+  @SppliarAuth()
+  @UseInterceptors(UpladFileDocS3([{name:"image_back",maxCount:1},{name:"logo",maxCount:1}]))
+  updateSupliar(
+    @Body() suppliarUpdateDto:UpdateSupplierDto,
+    @UploadedFiles() files:ImageTypeFile)
+    {
+
+      return this.supplierService.UpdateSupliar(suppliarUpdateDto,files)
   }
 
  

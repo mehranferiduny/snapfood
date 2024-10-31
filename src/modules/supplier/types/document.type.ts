@@ -6,3 +6,8 @@ export type ContractTypeFile={
   contract:Express.Multer.File[],
 
 }
+export type ImageTypeFile={
+  image_back:Express.Multer.File[],
+  logo:Express.Multer.File[],
+
+}

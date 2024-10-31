@@ -12,9 +12,10 @@ import { JwtService } from "@nestjs/jwt";
 import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
 import { statusSuppliar } from "./enum/status.enum";
-import { ContractTypeFile, DocumentTypeFile } from "./types/document.type";
+import { ContractTypeFile, DocumentTypeFile, ImageTypeFile } from "./types/document.type";
 import { S3Service } from "../s3/s3.service";
 import { SuppliarDocumentEntity } from "./entities/document.entity";
+import { UpdateSupplierDto } from "./dto/update-supplier.dto";
 
 
 
@@ -167,6 +168,33 @@ export class SupplierService {
       }
   }
 
+
+  async UpdateSupliar(updateSupplierDto:UpdateSupplierDto,files:ImageTypeFile){
+    const {id}=this.req.suppliar
+    const {image_back,logo}=files
+    const {discription,pick}=updateSupplierDto
+    const supliar=await this.suppliarRepository.findOneBy({id})
+    if(!supliar) throw new NotFoundException("not found suppliar!")
+
+      if(supliar.status !== statusSuppliar.Contract)
+        throw new BadRequestException("pleas first compliat save contract")
+
+      const imageBack=await this.s3serivic.uploadFile(image_back[0],"imageSupliar")
+      const imagelogo=await this.s3serivic.uploadFile(logo[0],"imageSupliar")
+      if(discription) supliar.discription=discription
+      if(imageBack) supliar.image_back=imageBack.Location
+      if(imagelogo) supliar.logo=imagelogo.Location
+      if(pick) supliar.pick=pick
+         supliar.status=statusSuppliar.Verify
+
+         await this.suppliarRepository.save(supliar)
+
+         return{
+          message:"update Supliar ready for add item"
+         }
+
+
+  }
 
   async checkOtp(checkOtpDto:checkOtpDto){
     const {mobile,code}=checkOtpDto

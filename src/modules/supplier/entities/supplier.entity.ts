@@ -3,7 +3,7 @@ import { EntityName } from "src/common/enum/entity-name.enum";
 import { CategoryEntity } from "src/modules/category/entities/category.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { OtpSuppliarEntity } from "./otp.entity";
-import { statusSuppliar } from "../enum/status.enum";
+import { PickSupliar, statusSuppliar } from "../enum/status.enum";
 import { SuppliarDocumentEntity } from "./document.entity";
 
 @Entity(EntityName.Supplier)
@@ -34,6 +34,24 @@ export class SupplierEntity extends BaseEntity {
 
   @Column({nullable:true,default:statusSuppliar.Registerd})
   status:string
+
+
+  @Column({nullable:true})
+  image_back:string
+
+  @Column({nullable:true})
+  logo:string
+
+  @Column({nullable:true})
+  discription:string
+
+  @Column({nullable:true,default:0})
+  score:number
+
+  @Column({nullable:true,default:PickSupliar.PickMotory})
+  pick:string
+
+
 
 
   @Column({nullable:true})
