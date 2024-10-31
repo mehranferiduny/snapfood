@@ -1,3 +1,4 @@
+import { SupplierEntity } from "src/modules/supplier/entities/supplier.entity"
 
 
 
@@ -5,7 +6,8 @@ export {}
 declare global {
     namespace Express {
         export interface Request {
-            user?: UserEntity
+            user?: UserEntity,
+            suppliar?:SupplierEntity
         }
     }
 }
