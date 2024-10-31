@@ -8,8 +8,6 @@ import { EntityName } from "src/common/enum/entity-name.enum";
 export class OtpEntity extends BaseEntity{
    @Column()
    code:string
-   @Column({nullable:true})
-   mehtoad:string
    @Column()
    expiresIn:Date
    @Column()

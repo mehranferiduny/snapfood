@@ -41,3 +41,10 @@ export class SuppliarInfoDto{
    @IsIdentityCard("IR")
    national_code:string
 }
+export class SuppliarUploadDocDto{
+   @ApiProperty({format:"binary"})
+   acsseptDoc:string
+
+   @ApiProperty({format:"binary"})
+   image:string
+}

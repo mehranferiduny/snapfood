@@ -4,7 +4,8 @@ export enum EntityName{
   User='user',
   UserAdress='user_adress',
   Category='category',
-  Otp="otp_user",
+  Otp="otp",
   Supplier="supplier",
-  SupplierOtp="supplier_otp"
+  SupplierOtp="supplier_otp",
+  SupplierDocument="supplier_document"
 }

@@ -4,6 +4,7 @@ import { CategoryEntity } from "src/modules/category/entities/category.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { OtpSuppliarEntity } from "./otp.entity";
 import { statusSuppliar } from "../enum/status.enum";
+import { SuppliarDocumentEntity } from "./document.entity";
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity extends BaseEntity {
@@ -32,7 +33,7 @@ export class SupplierEntity extends BaseEntity {
   status:string
 
 
-  @Column()
+  @Column({nullable:true})
   categooryId:number
 
 
@@ -51,6 +52,10 @@ export class SupplierEntity extends BaseEntity {
 
    @OneToMany(()=>SupplierEntity,suppliar=>suppliar.agent)
    sebsets:SupplierEntity[]
+
+
+   @OneToMany(()=>SuppliarDocumentEntity,document=>document.supliar,{onDelete:"CASCADE"})
+   document:SuppliarDocumentEntity
 
 
    

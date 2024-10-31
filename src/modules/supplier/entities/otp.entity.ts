@@ -9,10 +9,9 @@ import { SupplierEntity } from "./supplier.entity";
 export class OtpSuppliarEntity extends BaseEntity{
    @Column()
    code:string
-   @Column({nullable:true})
-   mehtoad:string
    @Column()
    expiresIn:Date
+
    @Column()
    suppliarId:number
    @OneToOne(()=>SupplierEntity,(suppliar)=>suppliar.otp,{onDelete:"CASCADE"})

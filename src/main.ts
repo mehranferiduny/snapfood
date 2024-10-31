@@ -8,7 +8,7 @@ import { config } from 'dotenv';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   config({path:join(process.cwd(),".env")})
-  swagerConfigInit(app)
+  swagerConfigInit(app);
   const {PORT}=process.env 
   await app.listen(PORT,()=>{
     console.log(`http://localhost:${PORT}`);

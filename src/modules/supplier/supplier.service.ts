@@ -1,9 +1,9 @@
-import { BadRequestException, ConflictException, Inject, Injectable, Scope, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Inject, Injectable, NotFoundException, Scope, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { SupplierEntity } from "./entities/supplier.entity";
 import { Repository } from "typeorm";
 import { CategoryService } from "../category/category.service";
-import { SinUpSupplierDto, SuppliarInfoDto } from "./dto/supplier.dto";
+import { SinUpSupplierDto, SuppliarInfoDto, SuppliarUploadDocDto } from "./dto/supplier.dto";
 import { OtpSuppliarEntity } from "./entities/otp.entity";
 import { randomInt } from "crypto";
 import { checkOtpDto } from "../auth/dto/auth.dto";
@@ -12,6 +12,9 @@ import { JwtService } from "@nestjs/jwt";
 import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
 import { statusSuppliar } from "./enum/status.enum";
+import { DocumentTypeFile } from "./types/document.type";
+import { S3Service } from "../s3/s3.service";
+import { SuppliarDocumentEntity } from "./entities/document.entity";
 
 
 
@@ -20,8 +23,11 @@ export class SupplierService {
     constructor(
       @InjectRepository(SupplierEntity) private readonly suppliarRepository:Repository<SupplierEntity>,
       @InjectRepository(OtpSuppliarEntity) private readonly otpsuppliarRepository:Repository<OtpSuppliarEntity>,
+      @InjectRepository(SuppliarDocumentEntity) private readonly suppliarDocRepository:Repository<SuppliarDocumentEntity>,
+     
       private readonly categooryService:CategoryService,
       private readonly jwtSirvis:JwtService,
+      private readonly s3serivic:S3Service,
       @Inject(REQUEST) private readonly req:Request
     ){}
 
@@ -106,6 +112,41 @@ export class SupplierService {
       }
 
   }
+
+  async uploadDocSuppliar(suppliarDocDto:SuppliarUploadDocDto,files:DocumentTypeFile){
+
+    const {id}=this.req.suppliar
+    const {acsseptDoc,image}=files
+
+    const suppliar=await this.suppliarRepository.findOneBy({id})
+  
+
+    
+    if(!suppliar) throw new NotFoundException("suppliar not found!")
+      
+      const suppliarDocument= this.suppliarDocRepository.create({supplerId:suppliar.id})
+    const imageResalt=await this.s3serivic.uploadFile(image[0],"images")      
+    const documentResalt=await this.s3serivic.uploadFile(acsseptDoc[0],"acsseptDoc")      
+   
+
+   
+    
+    if(imageResalt) suppliarDocument.image=imageResalt.Location;
+    if(documentResalt) suppliarDocument.acsseptDoc=documentResalt.Location;
+    await this.suppliarDocRepository.save(suppliarDocument)
+
+    suppliar.status=statusSuppliar.UploadDocument;
+
+    await this.suppliarRepository.save(suppliar)
+    return{
+      message:"upload document sucsesfully"
+    }
+    
+
+    
+
+  }
+
 
   async checkOtp(checkOtpDto:checkOtpDto){
     const {mobile,code}=checkOtpDto
