@@ -10,6 +10,10 @@ export class SuppliarDocumentEntity extends BaseEntity{
   acsseptDoc:string
   @Column()
   image:string
+  @Column()
+  acsseptDocKey:string
+  @Column()
+  imageKey:string
 
   @Column({nullable:true})
   supplerId:number

@@ -126,18 +126,27 @@ export class SupplierService {
     if(!suppliar) throw new NotFoundException("suppliar not found!")
 
       let isDocument= await this.suppliarDocRepository.findOneBy({supplerId:suppliar.id})
-      if(!isDocument){
+      if(isDocument){
+        await this.s3serivic.deleteFile(isDocument.imageKey)
+        await this.s3serivic.deleteFile(isDocument.acsseptDocKey)
+      }else{
           isDocument=this.suppliarDocRepository.create({supplerId:suppliar.id})
       }
        
     const imageResalt=await this.s3serivic.uploadFile(image[0],"images")      
     const documentResalt=await this.s3serivic.uploadFile(acsseptDoc[0],"acsseptDoc")      
    
-
+       
    
     
-    if(imageResalt) isDocument.image=imageResalt.Location;
-    if(documentResalt) isDocument.acsseptDoc=documentResalt.Location;
+    if(imageResalt){
+      isDocument.image=imageResalt.Location;
+      isDocument.imageKey=imageResalt.Key;
+    } 
+    if(documentResalt){
+      isDocument.acsseptDoc=documentResalt.Location;
+      isDocument.acsseptDocKey=documentResalt.Key;
+    } 
     await this.suppliarDocRepository.save(isDocument)
 
     suppliar.status=statusSuppliar.UploadDocument;
