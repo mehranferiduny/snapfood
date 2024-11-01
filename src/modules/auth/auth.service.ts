@@ -7,6 +7,7 @@ import { checkOtpDto, sendOtpDto } from './dto/auth.dto';
 import { randomInt } from 'crypto';
 import { TokenPailod } from './types/paylod';
 import { JwtService } from '@nestjs/jwt';
+import { SupplierEntity } from '../supplier/entities/supplier.entity';
 
 
 @Injectable()
@@ -108,6 +109,7 @@ export class AuthService {
       throw new UnauthorizedException("login on Accont")
     }
   }
+  
 
 
  

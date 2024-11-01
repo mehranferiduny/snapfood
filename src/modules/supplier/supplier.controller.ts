@@ -5,6 +5,7 @@ import {
   Put,
   UseInterceptors,
   UploadedFiles,
+  UseGuards,
 
 } from "@nestjs/common";
 import { SinUpSupplierDto, SuppliarInfoDto, SuppliarUploadContractDto, SuppliarUploadDocDto } from "./dto/supplier.dto";
@@ -16,6 +17,8 @@ import { TypeData } from "src/common/enum/type-data.enum";
 import { UpladFileDocS3 } from "src/common/interceptor/upload-file.interceptor";
 import { ContractTypeFile, DocumentTypeFile, ImageTypeFile } from "./types/document.type";
 import { UpdateSupplierDto } from "./dto/update-supplier.dto";
+
+
 
 
 @Controller("supplier")
@@ -34,6 +37,8 @@ export class SupplierController {
     return this.supplierService.checkOtp(checkOtpDto)
     
   }
+
+  //!supplimented-info
   @Post("supplimented-info")
   @SppliarAuth()
   @ApiConsumes(TypeData.UrlEncoded,TypeData.Json)
@@ -42,6 +47,7 @@ export class SupplierController {
     
   }
 
+  //!document-upload
   @Put("/document-upload")
   @ApiConsumes(TypeData.MultipartData)
   @SppliarAuth()
@@ -53,6 +59,8 @@ export class SupplierController {
 
       return this.supplierService.uploadDocSuppliar(suppliarDocDto,files)
   }
+
+  //!contract-upload
   @Put("/contract-upload")
   @ApiConsumes(TypeData.MultipartData)
   @SppliarAuth()
@@ -64,6 +72,8 @@ export class SupplierController {
 
       return this.supplierService.uploadConcract(files)
   }
+
+  //!update-supliar
   @Put("/update-supliar")
   @ApiConsumes(TypeData.MultipartData,TypeData.UrlEncoded,TypeData.Json)
   @SppliarAuth()

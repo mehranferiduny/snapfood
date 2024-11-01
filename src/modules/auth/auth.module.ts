@@ -6,6 +6,7 @@ import { OtpEntity } from '../user/entity/otp.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 
+
 @Module({
   imports:[TypeOrmModule.forFeature([UserEntity,OtpEntity])],
   controllers: [AuthController],

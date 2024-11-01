@@ -19,6 +19,7 @@ import { UpdateSupplierDto } from "./dto/update-supplier.dto";
 
 
 
+
 @Injectable({scope:Scope.REQUEST})
 export class SupplierService {
     constructor(
@@ -166,7 +167,7 @@ export class SupplierService {
     const {contract}=files
 
     const suppliar=await this.suppliarRepository.findOneBy({id})
-  
+ 
 
     
     if(!suppliar) throw new NotFoundException("suppliar not found!")
@@ -263,5 +264,16 @@ export class SupplierService {
       throw new UnauthorizedException("login on Accont")
     }
   }
+
+
+
+
+
+  //! Find supliar
+  // async findSupliar(id:number){
+  //   const supliar =await this.suppliarRepository.findOneBy({id})
+  //   if(supliar) throw new NotFoundException("suppliar not found!")
+  //     return supliar
+  // }
 
 }
