@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger"
-import { IsEmail, IsIdentityCard, IsMobilePhone, Length } from "class-validator"
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
+import { IsEmail, IsIdentityCard, IsMobilePhone, IsString, Length } from "class-validator"
 
 export class SinUpSupplierDto {
 
@@ -17,17 +17,19 @@ export class SinUpSupplierDto {
   phone:string
 
   @ApiProperty()
+  @IsString()
   city:string
 
   @ApiProperty()
   @Length(3,50)
+  @IsString()
   store_name:string
 
   @ApiProperty()
   categooryId:number
 
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   invait_code:string
 
 }

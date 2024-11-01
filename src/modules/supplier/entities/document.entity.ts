@@ -13,7 +13,7 @@ export class SuppliarDocumentEntity extends BaseEntity{
 
   @Column({nullable:true})
   supplerId:number
-  @ManyToOne(()=>SupplierEntity,supliar=>supliar.document)
+  @OneToOne(()=>SupplierEntity,supliar=>supliar.document)
   @JoinColumn({name:'supplerId'})
   supliar:SupplierEntity
 }

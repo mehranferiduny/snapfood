@@ -62,7 +62,7 @@ export class SupplierEntity extends BaseEntity {
   categoory:CategoryEntity
 
 
-  @Column()
+  @Column({nullable:true})
   invait_code:string
 
   @Column({nullable:true})
@@ -75,7 +75,7 @@ export class SupplierEntity extends BaseEntity {
    sebsets:SupplierEntity[]
 
 
-   @OneToMany(()=>SuppliarDocumentEntity,document=>document.supliar,{onDelete:"CASCADE"})
+   @OneToOne(()=>SuppliarDocumentEntity,document=>document.supliar,{onDelete:"CASCADE"})
    document:SuppliarDocumentEntity
 
 
