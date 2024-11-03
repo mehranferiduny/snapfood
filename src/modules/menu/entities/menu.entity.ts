@@ -14,11 +14,13 @@ name:string
 description:string
 @Column()
 image:string
+@Column()
+imageKey:string
 @Column({type:'double'})
 price:number
 @Column({type:'double',default:0})
 discount:number
-@Column({type:'double'})
+@Column({type:'double',nullable:true})
 score:number
 
 
