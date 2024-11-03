@@ -3,6 +3,7 @@ import { EntityName } from "src/common/enum/entity-name.enum";
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { UserAdressEntity } from "./addres.entity";
 import { OtpEntity } from "./otp.entity";
+import { FeedBackEntity } from "src/modules/menu/entities/feedback.entity";
 
 @Entity(EntityName.User)
 export class UserEntity extends BaseEntity{
@@ -32,6 +33,9 @@ export class UserEntity extends BaseEntity{
 
    @OneToMany(()=>UserAdressEntity,(address)=>address.user)
    addressList:UserAdressEntity[]
+
+   @OneToMany(()=>FeedBackEntity,(feed)=>feed.user)
+   feedback:FeedBackEntity[]
 
 
    @Column({nullable:true})
