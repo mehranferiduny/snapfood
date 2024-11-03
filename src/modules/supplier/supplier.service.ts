@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { SupplierEntity } from "./entities/supplier.entity";
 import { Repository } from "typeorm";
 import { CategoryService } from "../category/category.service";
-import { SinUpSupplierDto, SuppliarInfoDto, SuppliarUploadDocDto } from "./dto/supplier.dto";
+import { LoginSuppliarDto, SinUpSupplierDto, SuppliarInfoDto, SuppliarUploadDocDto } from "./dto/supplier.dto";
 import { OtpSuppliarEntity } from "./entities/otp.entity";
 import { randomInt } from "crypto";
 import { checkOtpDto } from "../auth/dto/auth.dto";
@@ -73,6 +73,16 @@ export class SupplierService {
       message:"send code suppliar succesfully"
     }
 
+   }
+
+   async logIn(loginDto:LoginSuppliarDto){
+    const {phone}=loginDto
+    const suppliar =await this.suppliarRepository.findOneBy({phone})
+    if(!suppliar) throw new NotFoundException("suppliar not fund accont")
+    await this.createOtpSuppliar(suppliar)
+    return{
+      message:"send code suppliar succesfully"
+    }
    }
    async createOtpSuppliar(suppliar:SupplierEntity){
     const code =randomInt(10000,99999).toString();

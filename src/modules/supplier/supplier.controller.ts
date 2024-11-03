@@ -8,11 +8,11 @@ import {
   UseGuards,
 
 } from "@nestjs/common";
-import { SinUpSupplierDto, SuppliarInfoDto, SuppliarUploadContractDto, SuppliarUploadDocDto } from "./dto/supplier.dto";
+import { LoginSuppliarDto, SinUpSupplierDto, SuppliarInfoDto, SuppliarUploadContractDto, SuppliarUploadDocDto } from "./dto/supplier.dto";
 import { SupplierService } from "./supplier.service";
 import { checkOtpDto } from "../auth/dto/auth.dto";
 import { SppliarAuth } from "src/common/decorators/auth.decorator";
-import { ApiConsumes } from "@nestjs/swagger";
+import { ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { TypeData } from "src/common/enum/type-data.enum";
 import { UpladFileDocS3 } from "src/common/interceptor/upload-file.interceptor";
 import { ContractTypeFile, DocumentTypeFile, ImageTypeFile } from "./types/document.type";
@@ -22,15 +22,26 @@ import { UpdateSupplierDto } from "./dto/update-supplier.dto";
 
 
 @Controller("supplier")
+@ApiTags("Suppliar")
 export class SupplierController {
   constructor(private readonly supplierService: SupplierService) {}
 
+  //!SignUp
   @Post("signUp")
   @ApiConsumes(TypeData.UrlEncoded,TypeData.Json)
   signUp(@Body() signUpDto: SinUpSupplierDto) {
     return this.supplierService.sinUp(signUpDto)
     
   }
+
+ //!Login
+  @Post("login")
+  @ApiConsumes(TypeData.UrlEncoded,TypeData.Json)
+  logIn(@Body() loginDto: LoginSuppliarDto) {
+    return this.supplierService.logIn(loginDto)
+    
+  }
+
   @Post("check-otp")
   @ApiConsumes(TypeData.UrlEncoded,TypeData.Json)
   checkOtp(@Body() checkOtpDto: checkOtpDto) {

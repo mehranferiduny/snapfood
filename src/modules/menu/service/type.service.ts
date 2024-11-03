@@ -8,7 +8,7 @@ import { Request } from "express";
 
 
 @Injectable({scope:Scope.REQUEST})
-export class MenuService {
+export class TypeMenuService {
   constructor(
     @InjectRepository(TypeMenuEvtity) private readonly typeRepository:Repository<TypeMenuEvtity>,
     @Inject(REQUEST) private readonly req:Request
@@ -18,18 +18,23 @@ export class MenuService {
      const {id:suppliarId}=this.req.suppliar
     const type= this.typeRepository.create({suppliarId,title})
     await this.typeRepository.save(type)
+    return {
+      message:"type menu created susessfully"
+    }
        
   }
 
   async findAll() {
+    const {id:suppliarId}=this.req.suppliar
     return this.typeRepository.findAndCount({
-      where:{},
+      where:{suppliarId},
       order:{id:'DESC'}
     });
   }
 
  async findOne(id: number) {
-    const type=await this.typeRepository.findOneBy({id})
+  const {id:suppliarId}=this.req.suppliar
+    const type=await this.typeRepository.findOneBy({id,suppliarId})
     if(!type) throw new NotFoundException("Type Menu NotFund!")
     return type
   }
@@ -41,6 +46,17 @@ export class MenuService {
     await this.typeRepository.delete({id})
     return {
       message:"delete type menu sucsesfully"
+    }
+  }
+  async update(id: number,typeDto:TypeMenuDto) {
+     const {title}=typeDto
+    let type=await this.findOne(id)
+    if(type) type.title=title
+
+    await this.typeRepository.save(type)
+   
+    return {
+      message:"update type menu sucsesfully"
     }
   }
 }

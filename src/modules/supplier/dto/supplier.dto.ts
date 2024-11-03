@@ -55,3 +55,9 @@ export class SuppliarUploadContractDto{
    contract:string
 
 }
+export class LoginSuppliarDto{
+   @ApiProperty()
+  @IsMobilePhone("fa-IR",{},{message:"phone number invalid!"})
+  phone:string
+
+}

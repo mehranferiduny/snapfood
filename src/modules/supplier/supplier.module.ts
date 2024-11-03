@@ -18,6 +18,7 @@ import { NextLevelDocument, NextLevelInfo } from 'src/common/middleware/next-lev
   imports:[TypeOrmModule.forFeature([SupplierEntity,OtpSuppliarEntity,CategoryEntity,SuppliarDocumentEntity])],
   controllers: [SupplierController],
   providers: [SupplierService,JwtService,S3Service,CategoryService],
+  exports:[SupplierService,JwtService,S3Service,TypeOrmModule]
 })
 export class SupplierModule implements NestModule  {
   configure(consumer: MiddlewareConsumer) {
