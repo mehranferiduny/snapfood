@@ -45,7 +45,6 @@ export class SupplierService {
       store_name
     }=sinUpDto
      const slug=slugify(`${store_name}-${mangaer_family}`)
-     console.log(slug)
     const suppliarCheck=await this.suppliarRepository.findOneBy({phone})
     const suppliarSlugCheck=await this.suppliarRepository.findOneBy({slug})
     

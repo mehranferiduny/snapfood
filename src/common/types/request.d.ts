@@ -1,4 +1,5 @@
 import { SupplierEntity } from "src/modules/supplier/entities/supplier.entity"
+import { UserEntity } from "src/modules/user/entity/user.entity"
 
 
 
