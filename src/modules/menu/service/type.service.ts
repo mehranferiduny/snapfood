@@ -5,18 +5,22 @@ import { TypeMenuEvtity } from "../entities/types.entity";
 import { Repository } from "typeorm";
 import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
+import { SupplierService } from "src/modules/supplier/supplier.service";
 
 
 @Injectable({scope:Scope.REQUEST})
 export class TypeMenuService {
   constructor(
     @InjectRepository(TypeMenuEvtity) private readonly typeRepository:Repository<TypeMenuEvtity>,
-    @Inject(REQUEST) private readonly req:Request
+    @Inject(REQUEST) private readonly req:Request,
+    private readonly suppliarServis:SupplierService
+    
   ){}
  async create(typeDto: TypeMenuDto) {
-    const {title}=typeDto
+    const {title,priority}=typeDto
      const {id:suppliarId}=this.req.suppliar
-    const type= this.typeRepository.create({suppliarId,title})
+     await this.suppliarServis.ststusSupliar(suppliarId)
+    const type= this.typeRepository.create({suppliarId,title,priority})
     await this.typeRepository.save(type)
     return {
       message:"type menu created susessfully"

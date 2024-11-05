@@ -47,7 +47,10 @@ export class SupplierEntity extends BaseEntity {
   @Column({nullable:true})
   discription:string
 
-  @Column({type:"double"})
+  @Column()
+  slug:string
+
+  @Column({type:"double",nullable:true})
   score:number
 
   @Column({nullable:true,default:PickSupliar.PickMotory})

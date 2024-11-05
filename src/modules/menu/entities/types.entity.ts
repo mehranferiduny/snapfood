@@ -9,6 +9,10 @@ export class TypeMenuEvtity extends BaseEntity{
    @Column()
    title:string
 
+   @Column({default:1})
+   priority:number
+
+   
    @Column()
    suppliarId:number
    @ManyToOne(()=>SupplierEntity,supliar=>supliar.menuType,{onDelete:'CASCADE'})

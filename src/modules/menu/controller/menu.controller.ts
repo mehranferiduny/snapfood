@@ -21,6 +21,7 @@ import { SppliarAuth } from "src/common/decorators/auth.decorator";
 import { TypeData } from "src/common/enum/type-data.enum";
 import { UpladFileS3 } from "src/common/interceptor/upload-file.interceptor";
 import { MIME_TYPES } from "src/common/enum/type-image.enum";
+import { SkipAuth } from "src/common/decorators/skip-auth.decorator";
 
 @Controller("menu")
 @ApiTags("Menu")
@@ -30,7 +31,7 @@ export class MenuController {
 
 
   @Post()
-  @ApiConsumes(TypeData.Json,TypeData.UrlEncoded,TypeData.MultipartData)
+  @ApiConsumes(TypeData.MultipartData)
   @UseInterceptors(UpladFileS3("image"))
   createMenu(@Body() menuDto:MenuDto,  @UploadedFile(
     new ParseFilePipe({
@@ -41,5 +42,14 @@ export class MenuController {
     })
   )  image:Express.Multer.File ){
     return this.menuService.createItemMenu(menuDto,image)
+  }
+
+
+
+  @Get('all-by-slug/:slug')
+  @SkipAuth()
+  @ApiConsumes(TypeData.UrlEncoded,TypeData.Json)
+  findAll(@Param('slug') slug:string){
+    return this.menuService.findAll(slug)
   }
 }

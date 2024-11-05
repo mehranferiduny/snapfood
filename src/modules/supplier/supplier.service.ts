@@ -16,6 +16,7 @@ import { ContractTypeFile, DocumentTypeFile, ImageTypeFile } from "./types/docum
 import { S3Service } from "../s3/s3.service";
 import { SuppliarDocumentEntity } from "./entities/document.entity";
 import { UpdateSupplierDto } from "./dto/update-supplier.dto";
+import slugify from "slugify";
 
 
 
@@ -43,8 +44,12 @@ export class SupplierService {
       phone,
       store_name
     }=sinUpDto
-
+     const slug=slugify(`${store_name}-${mangaer_family}`)
+     console.log(slug)
     const suppliarCheck=await this.suppliarRepository.findOneBy({phone})
+    const suppliarSlugCheck=await this.suppliarRepository.findOneBy({slug})
+    
+    if(suppliarSlugCheck) throw new ConflictException("suppliar accont by slug alredy exist!")
     if(suppliarCheck) throw new ConflictException("suppliar accont alredy exist!")
     const category=await this.categooryService.findOneById(categooryId)
   
@@ -54,12 +59,13 @@ export class SupplierService {
   if(invait_code){
     agent =await this.suppliarRepository.findOneBy({invait_code})
   }
-    
+   
     const suppliar= this.suppliarRepository.create({
       categooryId:category.id,
       mangaer_family,
       mangaer_name,
       phone,
+      slug,
       city,
       store_name,
       agentId:agent?.id ?? null,
@@ -279,11 +285,23 @@ export class SupplierService {
 
 
 
+
+
   //! Find supliar
-  // async findSupliar(id:number){
-  //   const supliar =await this.suppliarRepository.findOneBy({id})
-  //   if(supliar) throw new NotFoundException("suppliar not found!")
-  //     return supliar
-  // }
+  async findSupliar(id:number){
+    const supliar =await this.suppliarRepository.findOneBy({id})
+    if(!supliar) throw new NotFoundException("suppliar not found!")
+      return supliar
+  }
+  async findSlugSupliar(slug:string){
+    const supliar =await this.suppliarRepository.findOneBy({slug})
+    if(!supliar) throw new NotFoundException("suppliar not found!")
+      return supliar
+  }
+
+  async ststusSupliar(id:number){
+    const ststus= await this.findSupliar(id)
+    if(ststus.status !== statusSuppliar.Verify) throw new BadRequestException("pleas first accont veryfuay")
+  }
 
 }

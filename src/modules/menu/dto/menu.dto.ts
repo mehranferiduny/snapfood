@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsString, Length } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { IsNumber, IsString, Length } from "class-validator";
 
 export class MenuDto {
   @ApiProperty()
@@ -29,4 +29,7 @@ export class TypeMenuDto {
   @IsString()
   @Length(3,20)
   title:string
+  @ApiPropertyOptional()
+  @IsNumber()
+  priority:number
 }

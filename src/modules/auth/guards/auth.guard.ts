@@ -8,11 +8,20 @@ import { isJWT } from "class-validator";
 import { Request } from "express";
 import { Observable } from "rxjs";
 import { AuthService } from "../auth.service";
+import { Reflector } from "@nestjs/core";
+import { SKIP_AUTH, SkipAuth } from "src/common/decorators/skip-auth.decorator";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly authServic: AuthService) {}
+  constructor(
+    private readonly authServic: AuthService,
+    private readonly reflector: Reflector
+
+  ) {}
   async canActivate(context: ExecutionContext) {
+    
+    const IsAuthSkip=this.reflector.get<Boolean>(SKIP_AUTH,context.getHandler())
+    if(IsAuthSkip) return true;
     const httpContex = context.switchToHttp();
     const request: Request = httpContex.getRequest<Request>();
     const token = this.extarcToken(request);
