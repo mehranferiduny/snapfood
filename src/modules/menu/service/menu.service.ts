@@ -91,6 +91,18 @@ export class MenuService {
     return item
   }
 
-  
+
+  async remove(id:number){
+    const {id:suppliarId}=this.req.suppliar
+    const item=await this.menuRepostory.findOne({
+      where:{id,suppliarId}
+    })
+    if(!item) throw new NotFoundException("item for remove not fund!")
+    await this.menuRepostory.remove(item)
+    return {
+      message:"remove item menu"
+    }
+  }
+
 
 }

@@ -54,11 +54,16 @@ export class MenuController {
     return this.menuService.findAll(slug)
   }
 
-  
+
   @Get('menuItem/:id')
   @SkipAuth()
   @ApiConsumes(TypeData.UrlEncoded,TypeData.Json)
   findOne(@Param('id',ParseIntPipe) id:number){
     return this.menuService.findOne(id)
+  }
+  @Get('Delete-menuItem/:id')
+  @ApiConsumes(TypeData.UrlEncoded,TypeData.Json)
+  remove(@Param('id',ParseIntPipe) id:number){
+    return this.menuService.remove(id)
   }
 }
