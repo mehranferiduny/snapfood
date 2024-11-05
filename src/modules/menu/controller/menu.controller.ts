@@ -11,6 +11,7 @@ import {
   ParseFilePipe,
   MaxFileSizeValidator,
   FileTypeValidator,
+  ParseIntPipe,
 } from "@nestjs/common";
 
 import { UpdateMenuDto } from "../dto/update-menu.dto";
@@ -51,5 +52,13 @@ export class MenuController {
   @ApiConsumes(TypeData.UrlEncoded,TypeData.Json)
   findAll(@Param('slug') slug:string){
     return this.menuService.findAll(slug)
+  }
+
+  
+  @Get('menuItem/:id')
+  @SkipAuth()
+  @ApiConsumes(TypeData.UrlEncoded,TypeData.Json)
+  findOne(@Param('id',ParseIntPipe) id:number){
+    return this.menuService.findOne(id)
   }
 }

@@ -1,4 +1,4 @@
-import { BadGatewayException, BadRequestException, Inject, Injectable, Scope } from "@nestjs/common";
+import { BadGatewayException, BadRequestException, Inject, Injectable, NotFoundException, Scope } from "@nestjs/common";
 import { REQUEST } from "@nestjs/core";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Request } from "express";
@@ -61,5 +61,36 @@ export class MenuService {
       }
     })
   }
+
+
+  async checkExist(id:number){
+    const item=await this.menuRepostory.findOneBy({id})
+    if(!item) throw new NotFoundException("item menu NotFound! ")
+      return item
+  }
+
+  async findOne(id:number){
+    await this.checkExist(id)
+    const item=await this.menuRepostory.findOne({
+      where:{id},
+      relations:{
+        foodType:true,
+        feedback:{
+          user:true
+        }
+      },
+      select:{
+        foodType:{title:true},
+        feedback:{comment:true,score:true,created_at:true,user:{first_name:true,last_name:true}},
+
+
+      }
+
+    })
+
+    return item
+  }
+
+  
 
 }
