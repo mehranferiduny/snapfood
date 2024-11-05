@@ -10,10 +10,13 @@ import { MenuEntity } from "./entities/menu.entity";
 import { FeedBackEntity } from "./entities/feedback.entity";
 import { SupplierService } from "../supplier/supplier.service";
 import { SupplierModule } from "../supplier/supplier.module";
+import { FeedbackController } from "./controller/feedback.controller";
+import { FeedbackService } from "./service/feedback.service";
+import { AuthModule } from "../auth/auth.module";
 
 @Module({
-  imports:[SupplierModule,TypeOrmModule.forFeature([TypeMenuEvtity,MenuEntity,FeedBackEntity])],
-  controllers: [MenuController,TypeMenuController],
-  providers: [MenuService,TypeMenuService],
+  imports:[SupplierModule,AuthModule,TypeOrmModule.forFeature([TypeMenuEvtity,MenuEntity,FeedBackEntity])],
+  controllers: [MenuController,TypeMenuController,FeedbackController],
+  providers: [MenuService,TypeMenuService,FeedbackService],
 })
 export class MenuModule {}
