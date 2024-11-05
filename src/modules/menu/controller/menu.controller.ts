@@ -44,6 +44,19 @@ export class MenuController {
   )  image:Express.Multer.File ){
     return this.menuService.createItemMenu(menuDto,image)
   }
+  @Patch("/:id")
+  @ApiConsumes(TypeData.MultipartData)
+  @UseInterceptors(UpladFileS3("image"))
+  updateMenu(@Param('id',ParseIntPipe)id:number,@Body() menuDto:UpdateMenuDto,  @UploadedFile(
+    new ParseFilePipe({
+      validators:[
+        new MaxFileSizeValidator({maxSize:2 * 1024 * 1024}),
+        new FileTypeValidator({fileType:`(${MIME_TYPES.JPG}|${MIME_TYPES.PNG})|${MIME_TYPES.JPEG}`})
+      ]
+    })
+  )  image:Express.Multer.File ){
+    return this.menuService.update(menuDto,image,id)
+  }
 
 
 

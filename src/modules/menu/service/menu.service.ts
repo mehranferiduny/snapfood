@@ -10,6 +10,7 @@ import { MenuDto } from "../dto/menu.dto";
 import { SupplierService } from "src/modules/supplier/supplier.service";
 import { statusSuppliar } from "src/modules/supplier/enum/status.enum";
 import { TypeMenuEvtity } from "../entities/types.entity";
+import { UpdateMenuDto } from "../dto/update-menu.dto";
 
 
 
@@ -102,6 +103,35 @@ export class MenuService {
     return {
       message:"remove item menu"
     }
+  }
+
+  async update(menuDto:UpdateMenuDto,image:Express.Multer.File,id:number){
+     const {id:suppliarId}=this.req.suppliar
+     const {description,discount,foodTypeId,name,price}=menuDto
+     const item=await this.menuRepostory.findOne({where:{id,suppliarId}})
+
+     const imageResalt=await this.s3Servis.uploadFile(image,"image-menu")
+     if(price < 1 && price > 100000000) throw new BadGatewayException("price invalid")
+      if(discount < 1 && discount > 100000000) throw new BadGatewayException("discount invalid")
+     if(!item) throw new NotFoundException("itemMenu NotFound!")
+      if(item.imageKey){
+         await this.s3Servis.deleteFile(item.imageKey)
+      }
+
+      if(description) item.description=description;
+      if(discount) item.discount=discount;
+      if(foodTypeId) item.foodTypeId=foodTypeId
+      if(name) item.name=name
+      if(price) item.price=price
+
+      if(imageResalt.Location) item.image=imageResalt.Location
+      if(imageResalt.Key) item.imageKey=imageResalt.Key
+
+      await this.menuRepostory.save(item)
+      return{
+        message:"menu item update sucessfully"
+      }
+      
   }
 
 

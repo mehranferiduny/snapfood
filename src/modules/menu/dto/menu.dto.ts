@@ -24,6 +24,7 @@ export class MenuDto {
   foodTypeId:number
 
 }
+
 export class TypeMenuDto {
   @ApiProperty()
   @IsString()
