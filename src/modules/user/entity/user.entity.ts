@@ -5,6 +5,7 @@ import { UserAdressEntity } from "./addres.entity";
 import { OtpEntity } from "./otp.entity";
 import { FeedBackEntity } from "src/modules/menu/entities/feedback.entity";
 import { UserStatus } from "../enum/user.enum";
+import { BasketEntity } from "src/modules/basket/entities/basket.entity";
 
 @Entity(EntityName.User)
 export class UserEntity extends BaseEntity{
@@ -40,6 +41,9 @@ export class UserEntity extends BaseEntity{
 
    @OneToMany(()=>FeedBackEntity,(feed)=>feed.user)
    feedback:FeedBackEntity[]
+
+   @OneToMany(()=>BasketEntity,(basket)=>basket.user)
+   baskets:BasketEntity[]
 
 
    @Column({nullable:true})

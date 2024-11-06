@@ -4,6 +4,7 @@ import { EntityName } from "src/common/enum/entity-name.enum";
 import { BaseEntity } from "src/common/abestracs/base.entity";
 import { SupplierEntity } from "src/modules/supplier/entities/supplier.entity";
 import { FeedBackEntity } from "./feedback.entity";
+import { BasketEntity } from "src/modules/basket/entities/basket.entity";
 
 @Entity(EntityName.Menu)
 export class MenuEntity extends BaseEntity{
@@ -36,4 +37,7 @@ score:number
 
   @OneToMany(()=>FeedBackEntity,feed=>feed.food)
   feedback:FeedBackEntity[]
+
+  @OneToMany(()=>BasketEntity,basket=>basket.food)
+  basket:BasketEntity[]
 }
