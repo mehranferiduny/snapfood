@@ -18,7 +18,7 @@ export class DiscountEntity extends BaseEntity {
   @Column({nullable:true})
   limit:number
 
-  @Column({nullable:true})
+  @Column({nullable:true,default:1})
   usage:number
 
   @Column({nullable:true})

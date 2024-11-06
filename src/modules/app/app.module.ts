@@ -6,6 +6,7 @@ import { AuthModule } from '../auth/auth.module';
 import { SupplierModule } from '../supplier/supplier.module';
 import { MenuModule } from '../menu/menu.module';
 import { UserModule } from '../user/user.module';
+import { DiscountModule } from '../discount/discount.module';
 
 
 @Module({
@@ -15,7 +16,8 @@ import { UserModule } from '../user/user.module';
     CategoryModule,
     SupplierModule,
     MenuModule,
-    UserModule
+    UserModule,
+    DiscountModule
   ],
   controllers: [],
   providers: [],
