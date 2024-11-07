@@ -15,7 +15,7 @@ export class CreateDiscountDto {
   amount:number;
 
   @ApiPropertyOptional()
-  expierIn:Date
+  expierIn:number
 
   @ApiPropertyOptional()
   limit:number

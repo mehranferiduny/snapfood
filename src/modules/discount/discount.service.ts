@@ -1,11 +1,11 @@
-import { ConflictException, Inject, Injectable, Scope } from '@nestjs/common';
+import { BadRequestException, ConflictException, Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { CreateDiscountDto } from './dto/create-discount.dto';
 import { UpdateDiscountDto } from './dto/update-discount.dto';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DiscountEntity } from './entities/discount.entity';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { isBoolean, toBoolean } from 'src/common/utils/function.utils';
 
 @Injectable({scope:Scope.REQUEST})
@@ -21,43 +21,51 @@ export class DiscountService {
         suppliariid=this.req.suppliar.id
     }
   
-
-    let discount=await this.discountRepository.findOneBy({code})
-    if(discount) throw new ConflictException("code already exist!")
+    const discountCheck=await this.discountRepository.findOneBy({code})
+    if(discountCheck) throw new ConflictException("code already exist!")
+      const DiscountObject:DeepPartial<DiscountEntity>={code}
 
       if(isBoolean(active)){
         active=toBoolean(active)
       }
-      discount= this.discountRepository.create({
-        code,
-        expierIn,
-        amount,
-        limit,
-        suppliarId:suppliariid,
-        percent,
-        active
-      })
+      DiscountObject['active']=active
+      if((amount && percent) || (!amount && !percent)){
+        throw new BadRequestException("you have sent input amount or percent!")
+      }
+      if(amount){
+        DiscountObject['amount']=amount
+      }else if(percent){
+        DiscountObject['percent']=percent
+      }
 
-      await this.discountRepository.save(discount)
+      if(expierIn && !isNaN(parseInt(expierIn.toString()))){
+        const time=1000 * 60 * 60 * 24 * expierIn
+        DiscountObject['expierIn']=new Date(new Date().getTime()+time)
+      }
+      if(limit && !isNaN(parseInt(limit.toString()))){
+        DiscountObject['limit']=limit
+      }
 
+        const discount=this.discountRepository.create(DiscountObject)
+        await this.discountRepository.save(discount)
+  
       return {
         message:"discount created saccesfully"
       }
   }
 
-  findAll() {
-    return `This action returns all discount`;
+  async findAll() {
+    return await this.discountRepository.find({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} discount`;
-  }
 
-  update(id: number, updateDiscountDto: UpdateDiscountDto) {
-    return `This action updates a #${id} discount`;
-  }
+ async remove(id: number) {
+    const discount=await this.discountRepository.findOneBy({id})
+    if(!discount) throw new NotFoundException("discount is notfound!")
 
-  remove(id: number) {
-    return `This action removes a #${id} discount`;
+      await this.discountRepository.delete({id})
+    return {
+      message:"discount remove suacsesfully"
+    };
   }
 }
