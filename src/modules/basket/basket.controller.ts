@@ -8,7 +8,7 @@ import {
   Delete,
 } from "@nestjs/common";
 import { BasketService } from "./basket.service";
-import { BasketDto } from "./dto/basket.dto";
+import { BasketDto, DiscountDto } from "./dto/basket.dto";
 import { ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { UserAuth } from "src/common/decorators/auth.decorator";
 import { TypeData } from "src/common/enum/type-data.enum";
@@ -26,9 +26,10 @@ export class BasketController {
     return this.basketService.addToBasketItem(createBasketDto);
   }
 
-  @Get()
-  findAll() {
-    return this.basketService.findAll();
+  @Post('addDiscount')
+  @ApiConsumes(TypeData.UrlEncoded,TypeData.Json)
+  addDiscount(@Body() discountDto: DiscountDto) {
+    return this.basketService.addDiscountBasket(discountDto);
   }
 
   @Get(":id")
@@ -41,6 +42,11 @@ export class BasketController {
     return this.basketService.update(+id);
   }
 
+  @Delete('deleteDiscount')
+  @ApiConsumes(TypeData.UrlEncoded,TypeData.Json)
+  removeDiscountInBasket(@Body() discountDto: DiscountDto) {
+    return this.basketService.removeDiscountBasket(discountDto);
+  }
   @Delete()
   @ApiConsumes(TypeData.UrlEncoded,TypeData.Json)
   removeItemInBasket(@Body() BasketDto: BasketDto) {

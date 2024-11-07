@@ -27,7 +27,10 @@ export class UserService{
 
   async signUp(signupDto:UserSignUpDto){
     const {phone}=signupDto
-    let user=await this.userRepository.findOneBy({phone})
+    let user=await this.userRepository.findOne({
+      where:{phone},
+        relations:{otp:true}   
+    })
     if(!user) {
       const mobileNumber=parseInt(phone)
     user=  this.userRepository.create({
@@ -36,6 +39,7 @@ export class UserService{
         }) 
      await this.userRepository.save(user)  
       }
+      if(user.otp?.expiresIn >= new Date(new Date().getTime())) throw new BadRequestException("code alreday befor send")
      await this.createOtpUser(user)
 
      return{

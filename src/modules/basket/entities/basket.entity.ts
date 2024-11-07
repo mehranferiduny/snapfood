@@ -23,8 +23,8 @@ export class BasketEntity extends BaseEntity {
   @Column({nullable:true})
   discountId:number
 
-  @Column({nullable:true, enum:TypeBasket,type:'enum'})
-  type:string
+  // @Column({nullable:true, enum:TypeBasket,type:'enum'})
+  // type:string
 
   @ManyToOne(()=>UserEntity,user=>user.baskets,{onDelete:"CASCADE"})
   user:UserEntity
