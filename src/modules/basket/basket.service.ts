@@ -1,4 +1,4 @@
-import { Inject, Injectable, Scope } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException, Scope } from "@nestjs/common";
 import { BasketDto } from "./dto/basket.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { BasketEntity } from "./entities/basket.entity";
@@ -47,7 +47,26 @@ export class BasketService {
     return `This action updates a #${id} basket`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} basket`;
+
+  async removeItemInBasket(createBasketDto: BasketDto) {
+    const {id:userId}=this.req.user
+    const {foodId}=createBasketDto
+   await this.menuServise.checkExist(foodId) 
+   let basketItem=await this.basketRepository.findOne({where:{foodId,userId}})
+   if(basketItem){
+    console.log(basketItem.count <= 1)
+    if(basketItem.count <= 1){
+      await this.basketRepository.delete({id:basketItem.id})
+    }else{
+      basketItem.count -=1
+      await this.basketRepository.save(basketItem)
+    }
+   
+    return {
+     message:"remove item food in basket"
+    }
+   }
+   throw new NotFoundException("item food notFound!")
+ 
   }
 }
