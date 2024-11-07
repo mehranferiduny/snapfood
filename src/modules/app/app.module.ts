@@ -7,6 +7,7 @@ import { SupplierModule } from '../supplier/supplier.module';
 import { MenuModule } from '../menu/menu.module';
 import { UserModule } from '../user/user.module';
 import { DiscountModule } from '../discount/discount.module';
+import { BasketModule } from '../basket/basket.module';
 
 
 @Module({
@@ -17,7 +18,8 @@ import { DiscountModule } from '../discount/discount.module';
     SupplierModule,
     MenuModule,
     UserModule,
-    DiscountModule
+    DiscountModule,
+    BasketModule
   ],
   controllers: [],
   providers: [],

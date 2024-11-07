@@ -1,15 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { BasketService } from './basket.service';
-import { CreateBasketDto } from './dto/create-basket.dto';
-import { UpdateBasketDto } from './dto/update-basket.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from "@nestjs/common";
+import { BasketService } from "./basket.service";
+import { BasketDto } from "./dto/basket.dto";
+import { ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { UserAuth } from "src/common/decorators/auth.decorator";
+import { TypeData } from "src/common/enum/type-data.enum";
 
-@Controller('basket')
+
+@Controller("basket")
+@ApiTags("Basket")
+@UserAuth()
 export class BasketController {
   constructor(private readonly basketService: BasketService) {}
 
   @Post()
-  create(@Body() createBasketDto: CreateBasketDto) {
-    return this.basketService.create(createBasketDto);
+  @ApiConsumes(TypeData.UrlEncoded,TypeData.Json)
+  addTobasketItem(@Body() createBasketDto: BasketDto) {
+    return this.basketService.addToBasketItem(createBasketDto);
   }
 
   @Get()
@@ -17,18 +31,18 @@ export class BasketController {
     return this.basketService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get(":id")
+  findOne(@Param("id") id: string) {
     return this.basketService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBasketDto: UpdateBasketDto) {
-    return this.basketService.update(+id, updateBasketDto);
+  @Patch(":id")
+  update(@Param("id") id: string, ) {
+    return this.basketService.update(+id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(":id")
+  remove(@Param("id") id: string) {
     return this.basketService.remove(+id);
   }
 }

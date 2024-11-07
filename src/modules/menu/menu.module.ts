@@ -18,5 +18,6 @@ import { AuthModule } from "../auth/auth.module";
   imports:[SupplierModule,AuthModule,TypeOrmModule.forFeature([TypeMenuEvtity,MenuEntity,FeedBackEntity])],
   controllers: [MenuController,TypeMenuController,FeedbackController],
   providers: [MenuService,TypeMenuService,FeedbackService],
+  exports:[MenuService,TypeMenuService,TypeOrmModule]
 })
 export class MenuModule {}

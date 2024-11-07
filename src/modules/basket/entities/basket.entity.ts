@@ -12,8 +12,14 @@ export class BasketEntity extends BaseEntity {
 
   @Column()
   userId:number
+
   @Column()
   foodId:number
+
+  @Column()
+  count:number
+
+
   @Column({nullable:true})
   discountId:number
 

@@ -28,13 +28,14 @@ export class UserService{
   async signUp(signupDto:UserSignUpDto){
     const {phone}=signupDto
     let user=await this.userRepository.findOneBy({phone})
-    if(user) throw new ConflictException("user by phone befor accont signup!")
+    if(!user) {
       const mobileNumber=parseInt(phone)
     user=  this.userRepository.create({
        phone,
         invait_code:mobileNumber.toString(32).toUpperCase()
         }) 
      await this.userRepository.save(user)  
+      }
      await this.createOtpUser(user)
 
      return{
