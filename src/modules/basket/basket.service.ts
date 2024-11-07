@@ -2,7 +2,7 @@ import { BadRequestException, Inject, Injectable, NotFoundException, Scope } fro
 import { BasketDto, DiscountDto } from "./dto/basket.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { BasketEntity } from "./entities/basket.entity";
-import { Repository } from "typeorm";
+import { IsNull, Not, Repository } from "typeorm";
 import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
 import { MenuService } from "../menu/service/menu.service";
@@ -64,7 +64,13 @@ export class BasketService {
     const {id:userId}=this.req.user
    
     const discount=await this.discountRepository.findOneBy({code})
+
     if(!discount) throw new NotFoundException("discount code notFound!")
+      if(!discount.active) throw new BadRequestException("discount code is not active")
+        if(discount.limit && discount.limit <= discount.usage) throw new BadRequestException("limited discount")
+          if(discount.expierIn && discount.expierIn?.getTime() <= new Date().getTime()) throw new BadRequestException("expier in code discount")
+
+
       const basketDiscount=await this.basketRepository.findOne({
     where:{userId,discountId:discount.id}})
     if(basketDiscount) throw new BadRequestException("Alreday uesd Discount")
@@ -80,6 +86,18 @@ export class BasketService {
           }
         })
         if(DiscountOfSuppliar) throw new BadRequestException("Already used Discount")
+      }else if(!discount.suppliarId){
+      const discountGeneral=await this.basketRepository.findOne({
+        relations:{discount:true},
+        where:{
+          userId,
+          discount:{
+            id:Not(IsNull()),
+            suppliarId:IsNull()
+          }
+        }
+      })
+      if(discountGeneral) throw new BadRequestException("already exist discount!")
       }
     await this.basketRepository.update({userId},{discountId:discount.id})
     return {
