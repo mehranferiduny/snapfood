@@ -7,8 +7,10 @@ import { Column, Entity, OneToMany } from "typeorm";
 export class DiscountEntity extends BaseEntity {
   @Column()
   code:string;
+  
   @Column({type:'double' , nullable:true})
   percent:number;
+
   @Column({type:'double' , nullable:true})
   amount:number;
 

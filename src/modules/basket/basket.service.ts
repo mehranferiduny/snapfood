@@ -132,24 +132,97 @@ export class BasketService {
       where:{userId}
     })
     const foods=basketItem.filter(item=>item.foodId)
-    const suppliarDiscount=basketItem.find(item=>item?.discount?.suppliarId)
+    const suppliarDiscount=basketItem.filter(item=>item?.discount?.suppliarId)
     const generalDiscount=basketItem.find(item=>item?.discount?.id && !item?.discount?.suppliarId)
     
 
     let total_amount=0
+    let payment_amount=0
     let total_discount_amount=0
     let foodList=[]
 
     for (const item of foods) {
         let discount_amount=0
-        const {food}=item
+        let discount_code:string=null
+        const {food,count}=item
+        total_amount+= food.price*count
         const suppliarId=food.suppliarId
-        let foodPrice=food.price
+        let foodPrice=food.price * count
         if(food.is_active_discount && food.discount > 0){
           discount_amount += foodPrice * (food.discount / 100)
-          foodPrice = foodPrice -foodPrice * (food.discount / 100)
+          foodPrice = foodPrice - foodPrice * (food.discount / 100)
+
         }
+
+        const discountItem=suppliarDiscount.find(({discount})=>discount.suppliarId === suppliarId)
+        if(discountItem){
+          const {discount:{active,amount,code,limit,percent,usage}}=discountItem
+          if(active){
+            if(!limit || (limit && limit > usage)){
+              discount_code=code
+              if(percent && percent > 0){
+                discount_amount += foodPrice * (percent / 100)
+                foodPrice= foodPrice - foodPrice * (percent / 100)
+              } else if(amount && amount > 0){
+                discount_amount += amount
+                foodPrice = amount > foodPrice ? 0 : foodPrice - amount 
+              }
+            }
+          }
+        }
+
+        payment_amount += foodPrice;
+        total_discount_amount += discount_amount
+        foodList.push({
+          name:food.name,
+          discription:food.description,
+          image:food.image,
+          discount:food.discount,
+          count,
+          price:food.price,
+          total_amount:food.price * count,
+          discount_amount,
+          payment_amount:(food.price * count) - discount_amount,
+          discount_code,
+          suppliarId,
+          suppliarName:food?.suppliar?.store_name,
+          suppliarImage:food?.suppliar?.logo,
+        })
+
+       
+
+
+
         
+    }
+    let generalDiscountDitel={}
+    if(generalDiscount?.discount?.active){
+      const {limit,usage,code,percent,amount}=generalDiscount.discount
+      if(!limit && (limit > usage)){
+        let discount_amount=0
+        if(percent && percent>0){
+          discount_amount=payment_amount * (percent / 100)
+        }else if(amount && amount>0){
+          discount_amount=amount
+        }
+        payment_amount= discount_amount > payment_amount ? 0 : payment_amount - discount_amount
+        total_discount_amount += discount_amount
+        generalDiscountDitel={
+          code,
+          percent,
+          amount,
+          discount_amount,
+
+        }
+      }
+    }
+
+    return{
+      total_amount,
+      payment_amount,
+      total_discount_amount,
+      foodList,
+      generalDiscountDitel
     }
 
   }

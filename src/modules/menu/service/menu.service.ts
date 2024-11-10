@@ -30,10 +30,10 @@ export class MenuService {
    await this.supliarServis.ststusSupliar(suppliarId)
     const{description,discount,name,price,foodTypeId}=menuDto
     if(price < 1 && price > 100000000) throw new BadGatewayException("price invalid")
-    if(discount < 1 && discount > 100000000) throw new BadGatewayException("discount invalid")
+    if(discount < 0 && discount > 100) throw new BadGatewayException("discount invalid")
     const imageResalt=await this.s3Servis.uploadFile(image,"image-menu")
     let isActiveDiscount=false 
-    if(discount > 1){
+    if(discount > 0){
       isActiveDiscount=true
     }
     const menu= this.menuRepostory.create({
@@ -117,7 +117,7 @@ export class MenuService {
 
      const imageResalt=await this.s3Servis.uploadFile(image,"image-menu")
      if(price < 1 && price > 100000000) throw new BadGatewayException("price invalid")
-      if(discount < 1 && discount > 100000000) throw new BadGatewayException("discount invalid")
+      if(discount < 0 && discount > 100) throw new BadGatewayException("discount invalid")
      if(!item) throw new NotFoundException("itemMenu NotFound!")
       if(item.imageKey){
          await this.s3Servis.deleteFile(item.imageKey)
@@ -125,7 +125,7 @@ export class MenuService {
 
       if(description) item.description=description;
       if(discount) item.discount=discount;
-      if(discount > 1) item.is_active_discount=true
+      if(discount > 0) item.is_active_discount=true
       if(foodTypeId) item.foodTypeId=foodTypeId
       if(name) item.name=name
       if(price) item.price=price
