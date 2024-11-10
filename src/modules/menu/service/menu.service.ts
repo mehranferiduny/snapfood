@@ -32,12 +32,17 @@ export class MenuService {
     if(price < 1 && price > 100000000) throw new BadGatewayException("price invalid")
     if(discount < 1 && discount > 100000000) throw new BadGatewayException("discount invalid")
     const imageResalt=await this.s3Servis.uploadFile(image,"image-menu")
+    let isActiveDiscount=false 
+    if(discount > 1){
+      isActiveDiscount=true
+    }
     const menu= this.menuRepostory.create({
       description,
       discount,
       image:imageResalt.Location,
       name,
       price,
+      is_active_discount:isActiveDiscount,
       suppliarId,
       foodTypeId,
       imageKey:imageResalt.Key,
@@ -120,6 +125,7 @@ export class MenuService {
 
       if(description) item.description=description;
       if(discount) item.discount=discount;
+      if(discount > 1) item.is_active_discount=true
       if(foodTypeId) item.foodTypeId=foodTypeId
       if(name) item.name=name
       if(price) item.price=price

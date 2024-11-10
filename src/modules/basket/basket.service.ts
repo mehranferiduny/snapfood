@@ -144,9 +144,10 @@ export class BasketService {
         let discount_amount=0
         const {food}=item
         const suppliarId=food.suppliarId
-        const foodPrice=food.price
-        if(food.is_active_discount){
-          
+        let foodPrice=food.price
+        if(food.is_active_discount && food.discount > 0){
+          discount_amount += foodPrice * (food.discount / 100)
+          foodPrice = foodPrice -foodPrice * (food.discount / 100)
         }
         
     }
