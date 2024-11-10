@@ -120,8 +120,19 @@ export class BasketService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} basket`;
+  async getBasket() {
+    const {id:userId}=this.req.user
+    const basketItem=await this.basketRepository.find({
+      relations:{
+        discount:true,
+        food:{
+          suppliar:true
+        }
+      },
+      where:{userId}
+    })
+    return basketItem
+    
   }
 
   update(id: number) {

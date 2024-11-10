@@ -32,9 +32,9 @@ export class BasketController {
     return this.basketService.addDiscountBasket(discountDto);
   }
 
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.basketService.findOne(+id);
+  @Get("")
+  findOne() {
+    return this.basketService.getBasket();
   }
 
   @Patch(":id")
