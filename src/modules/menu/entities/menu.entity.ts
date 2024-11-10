@@ -21,6 +21,8 @@ imageKey:string
 price:number
 @Column({type:'double',default:0})
 discount:number
+@Column({default:false})
+is_active_discount:boolean
 @Column({type:'double',nullable:true})
 score:number
 

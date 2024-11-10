@@ -131,8 +131,26 @@ export class BasketService {
       },
       where:{userId}
     })
-    return basketItem
+    const foods=basketItem.filter(item=>item.foodId)
+    const suppliarDiscount=basketItem.find(item=>item?.discount?.suppliarId)
+    const generalDiscount=basketItem.find(item=>item?.discount?.id && !item?.discount?.suppliarId)
     
+
+    let total_amount=0
+    let total_discount_amount=0
+    let foodList=[]
+
+    for (const item of foods) {
+        let discount_amount=0
+        const {food}=item
+        const suppliarId=food.suppliarId
+        const foodPrice=food.price
+        if(food.is_active_discount){
+          
+        }
+        
+    }
+
   }
 
   update(id: number) {
