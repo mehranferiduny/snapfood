@@ -20,5 +20,10 @@ namespace NodeJS{
     //! ACCSES_TOKEN
     REFRESH_TOKEN_SECRET:string
     ACSSES_TOKEN_SECRET:string
+
+    //!ZarinPall
+    ZARINPAL_VERIFAY_URL:string
+    ZARINPAL_RREQEST_URL:string
+    ZARINPAL_MERCHENT_ID:string
   }
 }
