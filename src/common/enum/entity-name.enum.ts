@@ -12,5 +12,8 @@ export enum EntityName{
   SupplierDocument="supplier_document",
   TypeMenu='type_menu',
   FeedBack='feedback',
+  Order='order',
+  OredrItem='order_item',
+  Payment='payment',
   Menu='menu'
 }

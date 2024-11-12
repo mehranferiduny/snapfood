@@ -1,7 +1,8 @@
 import { BaseEntity } from "src/common/abestracs/base.entity";
 import { EntityName } from "src/common/enum/entity-name.enum";
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { UserEntity } from "./user.entity";
+import { OrderEntity } from "src/modules/order/entities/order.entity";
 
 
 @Entity(EntityName.UserAdress)
@@ -22,4 +23,7 @@ export class UserAdressEntity extends BaseEntity{
 
   @ManyToOne(()=>UserEntity,(user)=>user.addressList,{onDelete:'CASCADE'})
   user:UserEntity
+
+  @OneToMany(()=>OrderEntity,(order)=>order.addres)
+  orders:OrderEntity[]
 }

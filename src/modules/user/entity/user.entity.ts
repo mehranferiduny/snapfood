@@ -6,6 +6,8 @@ import { OtpEntity } from "./otp.entity";
 import { FeedBackEntity } from "src/modules/menu/entities/feedback.entity";
 import { UserStatus } from "../enum/user.enum";
 import { BasketEntity } from "src/modules/basket/entities/basket.entity";
+import { OrderEntity } from "src/modules/order/entities/order.entity";
+import { PaymentEntity } from "src/modules/payment/entities/payment.entity";
 
 @Entity(EntityName.User)
 export class UserEntity extends BaseEntity{
@@ -44,6 +46,12 @@ export class UserEntity extends BaseEntity{
 
    @OneToMany(()=>BasketEntity,(basket)=>basket.user)
    baskets:BasketEntity[]
+
+   @OneToMany(()=>OrderEntity,(order)=>order.user)
+   orders:OrderEntity[]
+
+   @OneToMany(()=>PaymentEntity,(payment)=>payment.user)
+   payment:PaymentEntity[]
 
 
    @Column({nullable:true})

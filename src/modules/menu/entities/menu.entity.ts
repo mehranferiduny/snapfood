@@ -5,6 +5,7 @@ import { BaseEntity } from "src/common/abestracs/base.entity";
 import { SupplierEntity } from "src/modules/supplier/entities/supplier.entity";
 import { FeedBackEntity } from "./feedback.entity";
 import { BasketEntity } from "src/modules/basket/entities/basket.entity";
+import { OrderItemEntity } from "src/modules/order/entities/order-item.entity";
 
 @Entity(EntityName.Menu)
 export class MenuEntity extends BaseEntity{
@@ -42,4 +43,7 @@ score:number
 
   @OneToMany(()=>BasketEntity,basket=>basket.food)
   basket:BasketEntity[]
+
+  @OneToMany(()=>OrderItemEntity,item=>item.food)
+  items:OrderItemEntity[]
 }

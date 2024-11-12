@@ -7,6 +7,7 @@ import { PickSupliar, statusSuppliar } from "../enum/status.enum";
 import { SuppliarDocumentEntity } from "./document.entity";
 import { TypeMenuEvtity } from "src/modules/menu/entities/types.entity";
 import { MenuEntity } from "src/modules/menu/entities/menu.entity";
+import { OrderItemEntity } from "src/modules/order/entities/order-item.entity";
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity extends BaseEntity {
@@ -84,6 +85,9 @@ export class SupplierEntity extends BaseEntity {
 
    @OneToMany(()=>MenuEntity,menu=>menu.suppliar)
    menu:MenuEntity[]
+
+   @OneToMany(()=>OrderItemEntity,item=>item.suppliar)
+   items:OrderItemEntity[]
 
 
    @OneToOne(()=>SuppliarDocumentEntity,document=>document.supliar,{onDelete:"CASCADE"})
