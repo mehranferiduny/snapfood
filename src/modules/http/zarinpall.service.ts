@@ -19,10 +19,12 @@ export class ZarinPallService{
         email:user?.email ?? "exampel.gmail.com",
         mobail:user?.mobail ?? "091- --- -- --",
       },
-      callback_url:`${process.env.URL}/payment/verify`
+      callback_url:`${process.env.URL}payment/verify`
+    
 
     }
 
+   
     const resault=await lastValueFrom(
       this.httpSercice
       .post(process.env.ZARINPAL_RREQEST_URL,option,{})
