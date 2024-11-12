@@ -16,6 +16,7 @@ export class PaymentService {
   async getWayUrl(){
     const {id:userId,email,phone}=this.req.user
     const basket=await this.basketService.getBasket()
+
     return this.zarinService.sendRequest({amount:basket.payment_amount,description:"payment order",user:{email,mobail:phone}})
   }
 }

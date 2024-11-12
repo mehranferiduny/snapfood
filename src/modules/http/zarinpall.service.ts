@@ -10,14 +10,14 @@ export class ZarinPallService{
   ){}
 
   async sendRequest(data?:any){
-    const {amount,user,description}=data
+    const {amount,email,phone,description}=data
     const option={
       merchant_id:process.env.ZARINPAL_MERCHENT_ID,
       amount:amount * 10,
       description,
-      metdata:{
-        email:user?.email ?? "exampel.gmail.com",
-        mobail:user?.mobail ?? "091- --- -- --",
+      metadata:{
+        email:email ?? "exampel.gmail.com",
+        mobail:phone ?? "091- --- -- --",
       },
       callback_url:`${process.env.URL}payment/verify`
     
