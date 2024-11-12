@@ -20,6 +20,10 @@ import { CategoryService } from '../category/category.service';
 import { CategoryEntity } from '../category/entities/category.entity';
 import { ZarinPallService } from '../http/zarinpall.service';
 import { HttpModule } from '@nestjs/axios';
+import { OrderService } from '../order/order.service';
+import { OrderEntity } from '../order/entities/order.entity';
+import { UserService } from '../user/user.service';
+import { UserAdressEntity } from '../user/entity/addres.entity';
 
 
 
@@ -34,12 +38,16 @@ import { HttpModule } from '@nestjs/axios';
       SupplierEntity,
       CategoryEntity,
       OtpSuppliarEntity,
+      UserAdressEntity,
+      OrderEntity,
       SuppliarDocumentEntity,
       DiscountEntity])],
   controllers: [PaymentController],
   providers: [
     PaymentService,
+    OrderService,
     MenuService,
+    UserService,
     BasketService,
     S3Service,
     TypeMenuService,

@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Inject, Injectable, Scope, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Inject, Injectable, NotFoundException, Scope, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "./entity/user.entity";
 import { Repository } from "typeorm";
@@ -171,6 +171,12 @@ export class UserService{
     } catch (error) {
       throw new UnauthorizedException("login on Accont")
     }
+  }
+
+  async findAddres(id:number){
+    const addres=await this.useraddresRepository.findOneBy({id})
+    if(!addres) throw new NotFoundException("user addres not found!")
+      return addres
   }
 
 

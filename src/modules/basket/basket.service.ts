@@ -174,6 +174,7 @@ export class BasketService {
         payment_amount += foodPrice;
         total_discount_amount += discount_amount
         foodList.push({
+          foodId:food.id,
           name:food.name,
           discription:food.description,
           image:food.image,
