@@ -11,7 +11,7 @@ export class OrderEntity extends BaseEntity {
 
   @Column()
   userId:number
-  @Column()
+  @Column({nullable:true})
   addresId:number
 
   @Column()

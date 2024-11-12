@@ -8,6 +8,7 @@ import { MenuModule } from '../menu/menu.module';
 import { UserModule } from '../user/user.module';
 import { DiscountModule } from '../discount/discount.module';
 import { BasketModule } from '../basket/basket.module';
+import { PaymentModule } from '../payment/payment.module';
 
 
 @Module({
@@ -19,7 +20,8 @@ import { BasketModule } from '../basket/basket.module';
     MenuModule,
     UserModule,
     DiscountModule,
-    BasketModule
+    BasketModule,
+    PaymentModule
   ],
   controllers: [],
   providers: [],
