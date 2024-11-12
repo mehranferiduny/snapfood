@@ -23,6 +23,7 @@ export class OrderService {
     const {addresId,discription=undefined}=paymentDto
       const querryRuner=this.dataSouers.createQueryRunner()
       await querryRuner.connect()
+      await querryRuner.startTransaction()
     try {
      
       const {id:userId}=this.req.user
@@ -57,10 +58,9 @@ export class OrderService {
           throw new BadRequestException("food list is empty")
         }
 
-
+   
       await querryRuner.commitTransaction()
       await querryRuner.release()
-
         return order
 
    } catch (error) {

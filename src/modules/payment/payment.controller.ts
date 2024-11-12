@@ -3,8 +3,9 @@ import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { UserAuth } from 'src/common/decorators/auth.decorator';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { TypeData } from 'src/common/enum/type-data.enum';
 
 @Controller('payment')
 @ApiTags("Payment")
@@ -13,11 +14,12 @@ export class PaymentController {
 
   @Post()
   @UserAuth()
+  @ApiConsumes(TypeData.UrlEncoded,TypeData.Json)
   getWayUrl( @Body() paymentDto:CreatePaymentDto ){
    return this.paymentService.getWayUrl(paymentDto)
   }
 
-  @Get('/verfay')
+  @Get('/verify')
   async verifayPayment(
     @Query("Authority") authority:string,
     @Query("Status") status:string,
