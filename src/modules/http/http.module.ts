@@ -8,10 +8,10 @@ import { ZarinPallService } from "./zarinpall.service";
     HttpModule.register({
       maxRedirects:5,
       timeout:5000
-    })
+    }),
   ],
-  exports:[HttpService,ZarinPallService],
-  providers:[HttpService,ZarinPallService],
+  exports:[ZarinPallService,HttpModule],
+  providers:[ZarinPallService],
 })
 
 export class HttpApiModules{}

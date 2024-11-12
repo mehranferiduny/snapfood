@@ -18,10 +18,34 @@ import { OtpSuppliarEntity } from '../supplier/entities/otp.entity';
 import { SuppliarDocumentEntity } from '../supplier/entities/document.entity';
 import { CategoryService } from '../category/category.service';
 import { CategoryEntity } from '../category/entities/category.entity';
+import { ZarinPallService } from '../http/zarinpall.service';
+import { HttpModule } from '@nestjs/axios';
+
+
+
 
 @Module({
-  imports:[AuthModule,TypeOrmModule.forFeature([MenuEntity,TypeMenuEvtity,PaymentEntity,BasketEntity,SupplierEntity,CategoryEntity,OtpSuppliarEntity,SuppliarDocumentEntity,DiscountEntity])],
+  imports:[AuthModule,
+    TypeOrmModule.forFeature([
+      MenuEntity,
+      TypeMenuEvtity,
+      PaymentEntity,
+      BasketEntity,
+      SupplierEntity,
+      CategoryEntity,
+      OtpSuppliarEntity,
+      SuppliarDocumentEntity,
+      DiscountEntity])],
   controllers: [PaymentController],
-  providers: [PaymentService,MenuService,BasketService,S3Service,TypeMenuService,SupplierService,CategoryService],
+  providers: [
+    PaymentService,
+    MenuService,
+    BasketService,
+    S3Service,
+    TypeMenuService,
+    SupplierService,
+    CategoryService,
+    ZarinPallService,
+    ],
 })
 export class PaymentModule {}

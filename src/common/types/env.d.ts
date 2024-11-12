@@ -2,6 +2,7 @@ namespace NodeJS{
   interface ProcessEnv{
     //!App
     PORT:number
+    URL:string
     //!DB
     DB_PORT:number
     DB_NAME:string
@@ -25,5 +26,6 @@ namespace NodeJS{
     ZARINPAL_VERIFAY_URL:string
     ZARINPAL_RREQEST_URL:string
     ZARINPAL_MERCHENT_ID:string
+    ZARINPAL_GETWAY_URL:string
   }
 }

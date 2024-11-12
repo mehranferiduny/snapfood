@@ -9,6 +9,8 @@ import { UserModule } from '../user/user.module';
 import { DiscountModule } from '../discount/discount.module';
 import { BasketModule } from '../basket/basket.module';
 import { PaymentModule } from '../payment/payment.module';
+import { HttpApiModules } from '../http/http.module';
+import { HttpModule } from '@nestjs/axios';
 
 
 @Module({
@@ -21,7 +23,8 @@ import { PaymentModule } from '../payment/payment.module';
     UserModule,
     DiscountModule,
     BasketModule,
-    PaymentModule
+    PaymentModule,
+    HttpApiModules,
   ],
   controllers: [],
   providers: [],
