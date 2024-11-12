@@ -9,6 +9,7 @@ import { UserService } from '../user/user.service';
 import { OrderItemStatus, OrderStatus } from './enum/statusOrder.enum';
 import { OrderItemEntity } from './entities/order-item.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { CreatePaymentDto } from '../payment/dto/create-payment.dto';
 
 @Injectable({scope:Scope.REQUEST})
 export class OrderService {
@@ -18,7 +19,8 @@ export class OrderService {
     private readonly dataSouers:DataSource,
     private readonly userService:UserService
   ){}
-  async create(OrderDto: BasketType,addresId:number,discription?:string) {
+  async create(OrderDto: BasketType,paymentDto:CreatePaymentDto) {
+    const {addresId,discription=undefined}=paymentDto
       const querryRuner=this.dataSouers.createQueryRunner()
       await querryRuner.connect()
     try {

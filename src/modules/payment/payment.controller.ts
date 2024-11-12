@@ -12,7 +12,7 @@ export class PaymentController {
 
   @Post()
   @UserAuth()
-  getWayUrl(){
-   return this.paymentService.getWayUrl()
+  getWayUrl( @Body() paymentDto:CreatePaymentDto ){
+   return this.paymentService.getWayUrl(paymentDto)
   }
 }
