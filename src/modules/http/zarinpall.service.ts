@@ -50,6 +50,20 @@ export class ZarinPallService{
    
   }
   async verifyRequest(data?:any){
-    this.httpSercice.post(process.env.ZARINPAL_VERIFAY_URL,data,{})
+    const option={
+      authority:data.authority,
+      amount:data.amount * 10,
+      merchant_id:process.env.ZARINPAL_MERCHENT_ID
+    }
+    
+    const resault=await lastValueFrom(
+      this.httpSercice.post(process.env.ZARINPAL_VERIFAY_URL,option,{})
+      .pipe(map(res=>res.data))
+      .pipe(catchError((err)=>{
+        console.log(err)
+        throw new InternalServerErrorException("zarinpal connection failed!")
+      }))
+    )
+    return resault
   }
 } 
