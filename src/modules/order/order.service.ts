@@ -70,6 +70,16 @@ export class OrderService {
      throw error
    }
   }
+  async getOrderSupliar(){
+    const {id:suppliarId}=this.req.suppliar
+    const order=await this.orderRepository.find(
+      {
+        relations:{items:{suppliar:true}},
+        where:{items:{suppliarId}}
+      }
+    )
+    return order
+  }
 
   
 }

@@ -38,7 +38,14 @@ export class PaymentService {
            return { message:"payment suacsessfuly"}
     }else{
 
-      return this.zarinService.sendRequest({amount:basket.payment_amount,description:"payment order",user:{email,mobail:phone}})
+      const {authority,code,gatewayURl}=await this.zarinService.sendRequest({amount:basket.payment_amount,description:"payment order",user:{email,mobail:phone}})
+       payment.authority=authority
+       await this.paymentRepository.save(payment)
+       return{
+        gatewayURl,
+        code
+       }   
+   
     }
   }
 
@@ -53,4 +60,6 @@ export class PaymentService {
     })
     return await this.paymentRepository.save(payment)
   }
+
+ 
 }

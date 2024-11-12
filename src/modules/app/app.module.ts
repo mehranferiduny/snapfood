@@ -11,6 +11,7 @@ import { BasketModule } from '../basket/basket.module';
 import { PaymentModule } from '../payment/payment.module';
 import { HttpApiModules } from '../http/http.module';
 import { HttpModule } from '@nestjs/axios';
+import { OrderModule } from '../order/order.module';
 
 
 @Module({
@@ -25,6 +26,7 @@ import { HttpModule } from '@nestjs/axios';
     BasketModule,
     PaymentModule,
     HttpApiModules,
+    OrderModule
   ],
   controllers: [],
   providers: [],
