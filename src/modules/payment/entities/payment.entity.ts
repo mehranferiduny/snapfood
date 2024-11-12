@@ -14,9 +14,9 @@ export class PaymentEntity extends BaseEntity {
   @Column()
   amount:number
   @Column()
-  invoice_number:number
-  @Column({nullable:true})
-  authistory:number
+  invoice_number:string
+  // @Column({nullable:true})
+  // authistory:number
 
   @Column()
   userId:number
