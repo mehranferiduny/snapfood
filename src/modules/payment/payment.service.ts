@@ -1,4 +1,4 @@
-import { Inject, Injectable, Scope } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
@@ -11,6 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PaymentEntity } from './entities/payment.entity';
 import { Repository } from 'typeorm';
 import { PayemntType } from './types/payment.type';
+import { OrderStatus } from '../order/enum/statusOrder.enum';
 
 @Injectable({scope:Scope.REQUEST})
 export class PaymentService {
@@ -61,5 +62,21 @@ export class PaymentService {
     return await this.paymentRepository.save(payment)
   }
 
+
+  async verify(authority:string,status:string){
+    const payment=await this.paymentRepository.findOneBy({authority})
+    if(!payment) throw new NotFoundException()
+      if(payment.status) throw new ConflictException("already verifiyd")
+        if(status==="OK"){
+          const order=await this.orderService.findOne(payment.orderId)
+          order.status=OrderStatus.Paid
+          await this.orderService.save(order)
+          payment.status=true
+        }else{
+        return "http://forntendUrl.com/payment?status=failed"
+        }
+        await this.paymentRepository.save(payment)
+        return "http://forntendUrl.com/payment?status=secsess"
+  }
  
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, Scope } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -81,5 +81,15 @@ export class OrderService {
     return order
   }
 
+
+  async findOne(id:number){
+    const order=await this.orderRepository.findOneBy({id})
+    if(!order) throw new NotFoundException()
+      return order
+  }
+
+  async save(order:OrderEntity){
+    return this.orderRepository.save(order)
+  }
   
 }
