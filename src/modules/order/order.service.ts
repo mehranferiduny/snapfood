@@ -74,8 +74,26 @@ export class OrderService {
     const {id:suppliarId}=this.req.suppliar
     const order=await this.orderRepository.find(
       {
-        relations:{items:{suppliar:true}},
-        where:{items:{suppliarId}}
+        relations:{user:{addressList:true},items:{food:true}},
+        where:{items:{suppliarId},status:OrderStatus.Paid},
+        select:{
+          items:{
+            count:true,
+            status:true
+          },
+          user:{
+            first_name:true,
+            last_name:true,
+            phone:true,
+            addressList:{
+              province:true,
+              city:true,
+              address:true,
+              postal_code:true,
+            }
+          }
+        }
+       
       }
     )
     return order
